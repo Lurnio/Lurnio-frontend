@@ -1,3 +1,5 @@
+
+
 'use client'
 import React, { useState } from 'react';
 import { Search, ChevronDown, Star, Users, TrendingUp, Clock, Globe, ShoppingCart, Bot, UserCheck, Play, BookOpen, Award, Filter, Grid, List, Heart, Share2, Bookmark, Eye, Zap, Trophy, Target, Layers, ArrowUpRight, ChevronRight, Sparkles, MessageCircle, Calendar, Video, Download } from 'lucide-react';
@@ -137,8 +139,7 @@ const mentors: Mentor[] = [
     badge: 'Rising',
     nextAvailable: 'Понедельник в 15:00',
     responseTime: '< 3 часов',
-
-completedSessions: 423
+    completedSessions: 423
   }
 ];
 
@@ -254,7 +255,6 @@ const products: Product[] = [
   }
 ];
 
-
 const aiTeachers: AITeacher[] = [
   {
     id: 1,
@@ -368,8 +368,7 @@ export default function App() {
     { id: 'mentors', label: 'Эксперты', icon: UserCheck, count: '2,500+' }
   ];
 
-
-const renderStoreContent = () => (
+  const renderStoreContent = () => (
     <div className="space-y-6">
       {/* Featured Banner */}
       <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-2xl p-8 text-white relative overflow-hidden">
@@ -409,11 +408,11 @@ const renderStoreContent = () => (
       </div>
 
       {/* Products Grid */}
-      <div className={grid gap-3 ${viewType === 'grid' ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5' : 'grid-cols-1'}}>
+      <div className={`grid gap-3 ${viewType === 'grid' ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5' : 'grid-cols-1'}`}>
         {products.map((product) => (
-          <div key={product.id} className={group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-200 ${viewType === 'list' ? 'flex h-32' : 'h-72'}}>
+          <div key={product.id} className={`group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-200 ${viewType === 'list' ? 'flex h-32' : 'h-72'}`}>
             {/* Course Image/Icon */}
-            <div className={relative ${viewType === 'list' ? 'w-32 flex-shrink-0' : 'h-28'} bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center}>
+            <div className={`relative ${viewType === 'list' ? 'w-32 flex-shrink-0' : 'h-28'} bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center`}>
               <div className="text-white text-lg font-bold">{product.image}</div>
               
               {/* Badges */}
@@ -438,8 +437,7 @@ const renderStoreContent = () => (
               </div>
             </div>
 
-
-<div className={`p-2 flex-1 ${viewType === 'list' ? 'flex flex-col justify-between' : ''}`}>
+            <div className={`p-2 flex-1 ${viewType === 'list' ? 'flex flex-col justify-between' : ''}`}>
               {/* Header */}
               <div className="mb-2">
                 <h3 className="font-semibold text-gray-900 text-xs leading-tight line-clamp-2 group-hover:text-blue-600 transition-colors mb-1">
@@ -525,8 +523,7 @@ const renderStoreContent = () => (
         </div>
       </div>
 
-
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {aiTeachers.map((teacher) => (
           <div key={teacher.id} className="group bg-white border border-gray-200 rounded-lg p-3 hover:shadow-lg transition-all duration-200 h-64">
             {/* AI Badge */}
@@ -611,8 +608,7 @@ const renderStoreContent = () => (
     </div>
   );
 
-
-const renderMentorsContent = () => (
+ const renderMentorsContent = () => (
   <div className="space-y-6">
     {/* Mentors Banner */}
     <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 rounded-2xl p-8 text-white relative overflow-hidden">
@@ -688,8 +684,7 @@ const renderMentorsContent = () => (
             </div>
           </div>
 
-
-{/* Stats */}
+          {/* Stats */}
           <div className="grid grid-cols-3 gap-2 mb-2 py-1 border-t border-gray-100">
             <div className="text-center">
               <div className="text-sm font-medium text-gray-900">{mentor.students}</div>
@@ -774,8 +769,7 @@ const renderMentorsContent = () => (
               </div>
             </div>
 
-
-<div className="flex items-center gap-4">
+            <div className="flex items-center gap-4">
               <div className="relative hidden md:block">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
@@ -856,8 +850,7 @@ const renderMentorsContent = () => (
                 <span className="bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full text-xs">3</span>
               </button>
 
-
-{/* Quick Filters */}
+              {/* Quick Filters */}
               <div className="hidden md:flex items-center gap-2">
                 <span className="text-sm text-gray-500">Быстрые фильтры:</span>
                 {['Популярное', 'Новое', 'Скидки'].map((filter) => (
@@ -937,8 +930,7 @@ const renderMentorsContent = () => (
           )}
         </section>
 
-
-{/* Content */}
+        {/* Content */}
         {activeTab === 'store' && renderStoreContent()}
         {activeTab === 'ai-teachers' && renderAITeachersContent()}
         {activeTab === 'mentors' && renderMentorsContent()}
@@ -1034,3 +1026,4 @@ const renderMentorsContent = () => (
     </div>
   );
 }
+
