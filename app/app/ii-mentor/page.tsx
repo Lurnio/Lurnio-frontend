@@ -14,9 +14,9 @@ import {
   Grid,
   List,
 } from "lucide-react";
-import { RenderMentorsContent } from "./components/renderMentor";
-import { RenderAITeachersContent } from "./components/renderAI";
-import { RenderStoreContent } from "./components/renderStore";
+import { RenderStoreContent } from "../components/renderStore";
+import { RenderAITeachersContent } from "../components/renderAI";
+import { RenderMentorsContent } from "../components/renderMentor";
 
 type TabType = "store" | "ai-teachers" | "mentors";
 type ViewType = "grid" | "list";
