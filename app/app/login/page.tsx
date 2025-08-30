@@ -1,8 +1,7 @@
 'use client'
 import { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, MessageCircle } from 'lucide-react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+
 import Link from 'next/link';
 
 
@@ -39,7 +38,7 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <Header variant='full'/>
+
       
       <div className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
@@ -221,7 +220,7 @@ const LoginPage = () => {
         </div>
       </div>
       
-      <Footer />
+
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import Header from "../components/Header";
 
 export const metadata = {
   title: "Преса | MentorConnect",
@@ -11,7 +10,6 @@ export const metadata = {
 const PressPage = () => {
   return (
     <>
-      <Header variant="minimal" />
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           Преса

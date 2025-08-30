@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import Header from "../components/Header";
 
 export const metadata = {
   title: "Умови користування | MentorConnect",
@@ -8,14 +7,11 @@ export const metadata = {
     "Правила користування платформою MentorConnect: обов'язки користувачів, оплати, обмеження відповідальності, інтелектуальна власність та контакти.",
 };
 
-// Гарантуємо статичну генерацію (SSG). За потреби можна додати ISR через revalidate.
 export const dynamic = "force-static";
-// export const revalidate = 86400; // (необов'язково) оновлювати раз на 24 години
 
 export default function TermsPage() {
   return (
     <>
-      <Header variant="minimal" />
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <header className="mb-10">
           <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">

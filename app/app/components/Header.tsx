@@ -1,82 +1,67 @@
-// components/Header.tsx (SERVER COMPONENT)
-// Один компонент для всего проекта. Принимает variant: "full" | "minimal".
-// На серверных статичних сторінках рендерим <Header variant="minimal" /> —
-// остаётся только логотип/линк на главную. В остальных — <Header variant="full" />.
-
+"use client";
 import Link from "next/link";
-import ClientNav from "./ClientNav";
+import { Search } from "lucide-react";
+import { useState } from "react";
 
-type HeaderProps = {
-  variant?: "full" | "minimal";
-};
-
-const colors = {
-  primary: "#2563EB",
-  accent: "#8B5CF6",
-  background: "#F8FAFC",
-  white: "#FFFFFF",
-  text: "#1E293B",
-  textSecondary: "#64748B",
-  border: "#E2E8F0",
-} as const;
-
-export default function Header({ variant = "full" }: HeaderProps) {
+export default function Header() {
+  const [searchQuery, setSearchQuery] = useState("");
   return (
-    <header className="bg-white shadow-lg border-b-2" style={{ borderColor: colors.primary }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <Link href="/" className="flex items-center space-x-3">
-            <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-md transform transition-transform hover:scale-105"
-              style={{ background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.accent} 100%)` }}
-            >
-              M
+    <>
+      <header className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center relative">
+                <div className="w-4 h-4 bg-white rounded-full"></div>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full"></div>
+              </div>
+              <div>
+                <Link href="/">
+                  <span className="text-xl font-bold text-gray-900">
+                    MentorConnect
+                  </span>
+                  <span className="text-xs text-gray-500 ml-2 hidden sm:inline">
+                    Pro
+                  </span>
+                </Link>
+              </div>
             </div>
-            <span
-              className="text-2xl font-bold bg-gradient-to-r bg-clip-text text-transparent"
-              style={{ backgroundImage: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.accent} 100%)` }}
-            >
-              MentorConnect
-            </span>
-          </Link>
 
-          {/* Только в полноформатном варианте подключаем клиентский сабкомпонент */}
-          {variant === "full" ? <ClientNav /> : null}
+            <div className="flex items-center gap-4">
+              <div className="relative hidden md:block">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Поиск курсов, менторов..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm w-80 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                />
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <kbd className="bg-gray-200 text-gray-500 px-1.5 py-0.5 rounded text-xs font-medium">
+                    ⌘K
+                  </kbd>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/login"
+                  className="px-4 py-2 text-gray-700 font-medium text-sm hover:text-gray-900 transition-colors"
+                >
+                  Войти
+                </Link>
+                <Link
+                  href="/registration"
+                  className="px-6 py-2.5 bg-blue-600 text-white font-medium text-sm rounded-xl hover:bg-blue-700 transition-all hover:shadow-lg"
+                >
+                  Начать обучение
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 }
-
-// -----------------------------------------------------------------------------
-// components/ClientNav.tsx (CLIENT COMPONENT)
-// Вынесена клиентская логика (usePathname, активные стили). Этот файл содержит
-// только навигацию. Он будет подгружаться и гидратироваться лишь когда variant="full".
-
-
-// -----------------------------------------------------------------------------
-// Пример использования в макетах (App Router)
-// app/layout.tsx — общий лэйаут (FULL навигация)
-// export default function RootLayout({ children }: { children: React.ReactNode }) {
-//   return (
-//     <html lang="uk">
-//       <body>
-//         <Header variant="full" />
-//         {children}
-//       </body>
-//     </html>
-//   );
-// }
-
-// app/ua/layout.tsx — лэйаут для статичних інформаційних сторінок (MINIMAL)
-// export default function UaLayout({ children }: { children: React.ReactNode }) {
-//   return (
-//     <>
-//       <Header variant="minimal" />
-//       {children}
-//     </>
-//   );
-// }
-
-// Если нужны ещё более гибкие правила, можно в конкретной странице сделать:
-// export const dynamic = "force-static"; // или revalidate = 86400 для ISR, и передать <Header variant="minimal" />

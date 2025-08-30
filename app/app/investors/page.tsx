@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import Header from "../components/Header";
+
 
 export const metadata = {
   title: "Інвестори | MentorConnect",
@@ -11,7 +11,7 @@ export const metadata = {
 export default function InvestorsPage() {
   return (
     <>
-    <Header variant="minimal"/>
+
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Hero */}
         <section className="mb-12">

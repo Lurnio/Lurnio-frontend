@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../components/Header";
+
 
 export const metadata = {
   title: "Довідник | MentorConnect",
@@ -12,7 +12,7 @@ export const dynamic = "force-static";
 export default function GuidePage() {
   return (
     <>
-      <Header variant="minimal" />
+
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <header className="mb-10">

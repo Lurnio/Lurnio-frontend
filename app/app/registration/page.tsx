@@ -9,8 +9,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { useState } from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+
 import Link from "next/link";
 
 const SignupPage = () => {
@@ -63,7 +62,7 @@ const SignupPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-purple-50 via-white to-blue-50">
-      <Header variant="full" />
+
 
       <div className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
@@ -417,7 +416,7 @@ const SignupPage = () => {
         </div>
       </div>
 
-      <Footer />
+
     </div>
   );
 };
