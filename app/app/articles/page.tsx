@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../components/Header";
+
 
 export const metadata = {
   title: "Статті | MentorConnect",
@@ -12,7 +12,7 @@ export const dynamic = "force-static";
 export default function ArticlesPage() {
   return (
     <>
-      <Header variant="minimal" />
+
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <header className="mb-10">
           <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -20,7 +20,7 @@ export default function ArticlesPage() {
           </h1>
           <p className="text-slate-600 max-w-3xl">
             Аналітичні матеріали, поради від менторів та практичні кейси
-            розвитку кар'єри.
+            розвитку карєри.
           </p>
         </header>
 

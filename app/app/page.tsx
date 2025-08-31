@@ -3,13 +3,9 @@
 import React, { useState } from "react";
 import {
   ChevronDown,
-  Star,
-  Users,
   ShoppingCart,
   Bot,
   UserCheck,
-  BookOpen,
-  Award,
   Filter,
   Grid,
   List,

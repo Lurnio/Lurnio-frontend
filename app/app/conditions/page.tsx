@@ -108,7 +108,7 @@ export default function TermsPage() {
           </h2>
           <p className="text-slate-700">
             Використовуючи платформу{" "}
-            <span className="font-semibold">MentorConnect</span> та пов'язані
+            <span className="font-semibold">MentorConnect</span> та повязані
             сервіси, ви погоджуєтесь із цими Умовами користування (надалі —
             «Умови»). Якщо ви не згодні з будь-якою частиною Умов, будь ласка,
             не користуйтеся сервісом.
@@ -145,7 +145,7 @@ export default function TermsPage() {
           </h2>
           <ul className="list-disc pl-6 text-slate-700 space-y-1">
             <li>
-              Ви зобов'язані надати актуальні та повні дані під час реєстрації.
+              Ви зобовязані надати актуальні та повні дані під час реєстрації.
             </li>
             <li>
               Ви несете відповідальність за збереження конфіденційності
@@ -313,7 +313,7 @@ export default function TermsPage() {
           </h2>
           <div className="p-6 bg-white rounded-2xl shadow-sm border border-slate-100">
             <p className="text-slate-700">
-              З питань, пов'язаних з цими Умовами, звертайтесь на адресу:
+              З питань, повязаних з цими Умовами, звертайтесь на адресу:
             </p>
             <p className="text-slate-700 font-medium">
               legal@mentorconnect.example

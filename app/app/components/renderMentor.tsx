@@ -1,5 +1,8 @@
-import { Calendar, Star, UserCheck } from "lucide-react";
-
+import { Calendar, Star } from "lucide-react";
+import { BannerMentor } from "./Banners/BannerMentor";
+import { ButtonMentor1 } from "../ui/Buttons/ButtontMentor1";
+import { ButtonMentor2 } from "../ui/Buttons/ButtonMentor2";
+//#region other
 interface Mentor {
   id: number;
   name: string;
@@ -105,35 +108,17 @@ const mentors: Mentor[] = [
     completedSessions: 423,
   },
 ];
-
+//#endregion
 export const RenderMentorsContent = () => (
   <div className="space-y-6">
-    {/* Mentors Banner */}
-    <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 rounded-2xl p-8 text-white relative overflow-hidden">
-      <div className="relative z-10">
-        <div className="flex items-center gap-2 mb-3">
-          <UserCheck className="w-5 h-5" />
-          <span className="text-sm font-medium opacity-90">
-            Персональное наставничество
-          </span>
-        </div>
-        <h2 className="text-3xl font-bold mb-2">
-          Эксперты из ведущих компаний
-        </h2>
-        <p className="text-lg opacity-90 mb-4">
-          Индивидуальные консультации от практикующих специалистов
-        </p>
-        <button className="bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-          Найти ментора
-        </button>
-      </div>
-    </div>
+    <BannerMentor />
+    
 
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       {mentors.map((mentor) => (
         <div
           key={mentor.id}
-          className="group bg-white border border-gray-200 rounded-lg p-3 hover:shadow-lg transition-all duration-200 h-80"
+          className="group bg-white border border-gray-200 rounded-lg p-3 hover:shadow-lg transition-all duration-200  flex-col h-full"
         >
           {/* Badge */}
           {mentor.badge && (
@@ -271,13 +256,9 @@ export const RenderMentorsContent = () => (
           </div>
 
           {/* Actions */}
-          <div className="flex gap-1">
-            <button className="flex-1 bg-blue-600 text-white py-1.5 px-2 rounded text-xs font-medium hover:bg-blue-700 transition-colors">
-              Забронировать
-            </button>
-            <button className="flex-1 border border-gray-300 text-gray-700 py-1.5 px-2 rounded text-xs font-medium hover:bg-gray-50 transition-colors">
-              Профиль
-            </button>
+          <div className="mt-auto flex gap-1">
+              <ButtonMentor1 />
+              <ButtonMentor2 />
           </div>
         </div>
       ))}

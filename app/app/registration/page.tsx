@@ -1,4 +1,5 @@
-'use client'
+'use client';
+
 import {
   User,
   Mail,
@@ -7,53 +8,50 @@ import {
   EyeOff,
   MessageCircle,
   CheckCircle2,
-} from "lucide-react";
-import { useState } from "react";
-
-import Link from "next/link";
+} from 'lucide-react';
+import { useState } from 'react';
+import Link from 'next/link';
 
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
   });
   const [acceptTerms, setAcceptTerms] = useState(false);
 
   const colors = {
-    primary: "#2563EB",
-    primaryHover: "#1D4ED8",
-    accent: "#8B5CF6",
-    background: "#F8FAFC",
-    white: "#FFFFFF",
-    text: "#1E293B",
-    textSecondary: "#64748B",
-    border: "#E2E8F0",
-    success: "#059669",
+    primary: '#2563EB',
+    accent: '#8B5CF6',
+    text: '#1E293B',
+    textSecondary: '#64748B',
+    border: '#E2E8F0',
+    success: '#059669',
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
-      alert("Пароли не совпадают!");
+      alert('Пароли не совпадают!');
       return;
     }
     if (!acceptTerms) {
-      alert("Необходимо принять условия использования");
+      alert('Необходимо принять условия использования');
       return;
     }
-    // Логика регистрации
-    console.log("Signup attempt:", formData);
+
+    console.log('Signup attempt:', formData);
   };
 
   const isPasswordValid = formData.password.length >= 8;
@@ -62,14 +60,13 @@ const SignupPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-purple-50 via-white to-blue-50">
-
-
       <div className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div
             className="bg-white rounded-2xl shadow-2xl p-8 border"
             style={{ borderColor: colors.border }}
           >
+            {/* Header */}
             <div className="text-center mb-8">
               <div className="mb-6">
                 <div
@@ -92,7 +89,9 @@ const SignupPage = () => {
               </p>
             </div>
 
+            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Name */}
               <div>
                 <label
                   className="block text-sm font-semibold mb-3"
@@ -110,17 +109,14 @@ const SignupPage = () => {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full pl-12 pr-4 py-4 border-2 rounded-xl focus:ring-4 focus:ring-opacity-20 focus:outline-none transition-all duration-200"
-                    style={{
-                      borderColor: colors.border,
-                      focusRingColor: colors.primary,
-                      focusBorderColor: colors.primary,
-                    }}
+                    className="w-full pl-12 pr-4 py-4 border-2 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 focus:outline-none transition-all duration-200"
+                    style={{ borderColor: colors.border }}
                     placeholder="Иван Петров"
                   />
                 </div>
               </div>
 
+              {/* Email */}
               <div>
                 <label
                   className="block text-sm font-semibold mb-3"
@@ -138,17 +134,14 @@ const SignupPage = () => {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full pl-12 pr-4 py-4 border-2 rounded-xl focus:ring-4 focus:ring-opacity-20 focus:outline-none transition-all duration-200"
-                    style={{
-                      borderColor: colors.border,
-                      focusRingColor: colors.primary,
-                      focusBorderColor: colors.primary,
-                    }}
+                    className="w-full pl-12 pr-4 py-4 border-2 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 focus:outline-none transition-all duration-200"
+                    style={{ borderColor: colors.border }}
                     placeholder="ivan@example.com"
                   />
                 </div>
               </div>
 
+              {/* Password */}
               <div>
                 <label
                   className="block text-sm font-semibold mb-3"
@@ -161,19 +154,17 @@ const SignupPage = () => {
                     <Lock size={20} style={{ color: colors.textSecondary }} />
                   </div>
                   <input
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     name="password"
                     value={formData.password}
                     onChange={handleInputChange}
                     required
-                    className="w-full pl-12 pr-12 py-4 border-2 rounded-xl focus:ring-4 focus:ring-opacity-20 focus:outline-none transition-all duration-200"
+                    className={`w-full pl-12 pr-12 py-4 border-2 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 focus:outline-none transition-all duration-200`}
                     style={{
                       borderColor:
                         isPasswordValid && formData.password
                           ? colors.success
                           : colors.border,
-                      focusRingColor: colors.primary,
-                      focusBorderColor: colors.primary,
                     }}
                     placeholder="Минимум 8 символов"
                   />
@@ -190,15 +181,9 @@ const SignupPage = () => {
                       className="hover:opacity-70 transition-opacity"
                     >
                       {showPassword ? (
-                        <EyeOff
-                          size={20}
-                          style={{ color: colors.textSecondary }}
-                        />
+                        <EyeOff size={20} style={{ color: colors.textSecondary }} />
                       ) : (
-                        <Eye
-                          size={20}
-                          style={{ color: colors.textSecondary }}
-                        />
+                        <Eye size={20} style={{ color: colors.textSecondary }} />
                       )}
                     </button>
                   </div>
@@ -208,15 +193,15 @@ const SignupPage = () => {
                     <div
                       className={`w-2 h-2 rounded-full transition-colors duration-200 ${
                         formData.password.length >= 8
-                          ? "bg-green-500"
-                          : "bg-gray-300"
+                          ? 'bg-green-500'
+                          : 'bg-gray-300'
                       }`}
                     />
                     <span
                       className={`text-xs ${
                         formData.password.length >= 8
-                          ? "text-green-600"
-                          : "text-gray-500"
+                          ? 'text-green-600'
+                          : 'text-gray-500'
                       }`}
                     >
                       Минимум 8 символов
@@ -225,6 +210,7 @@ const SignupPage = () => {
                 </div>
               </div>
 
+              {/* Confirm Password */}
               <div>
                 <label
                   className="block text-sm font-semibold mb-3"
@@ -237,27 +223,22 @@ const SignupPage = () => {
                     <Lock size={20} style={{ color: colors.textSecondary }} />
                   </div>
                   <input
-                    type={showConfirmPassword ? "text" : "password"}
+                    type={showConfirmPassword ? 'text' : 'password'}
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
                     required
-                    className="w-full pl-12 pr-12 py-4 border-2 rounded-xl focus:ring-4 focus:ring-opacity-20 focus:outline-none transition-all duration-200"
+                    className="w-full pl-12 pr-12 py-4 border-2 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 focus:outline-none transition-all duration-200"
                     style={{
                       borderColor: isConfirmPasswordValid
                         ? colors.success
                         : colors.border,
-                      focusRingColor: colors.primary,
-                      focusBorderColor: colors.primary,
                     }}
                     placeholder="Повторите пароль"
                   />
                   <div className="absolute inset-y-0 right-0 pr-4 flex items-center space-x-2">
                     {isConfirmPasswordValid && (
-                      <CheckCircle2
-                        size={16}
-                        style={{ color: colors.success }}
-                      />
+                      <CheckCircle2 size={16} style={{ color: colors.success }} />
                     )}
                     <button
                       type="button"
@@ -267,47 +248,39 @@ const SignupPage = () => {
                       className="hover:opacity-70 transition-opacity"
                     >
                       {showConfirmPassword ? (
-                        <EyeOff
-                          size={20}
-                          style={{ color: colors.textSecondary }}
-                        />
+                        <EyeOff size={20} style={{ color: colors.textSecondary }} />
                       ) : (
-                        <Eye
-                          size={20}
-                          style={{ color: colors.textSecondary }}
-                        />
+                        <Eye size={20} style={{ color: colors.textSecondary }} />
                       )}
                     </button>
                   </div>
                 </div>
               </div>
 
+              {/* Terms */}
               <div className="flex items-start space-x-3">
                 <input
                   type="checkbox"
                   id="terms"
                   checked={acceptTerms}
                   onChange={(e) => setAcceptTerms(e.target.checked)}
-                  className="w-5 h-5 rounded border-2 focus:ring-2 focus:ring-opacity-20 mt-1"
-                  style={{
-                    borderColor: colors.border,
-                    focusRingColor: colors.primary,
-                  }}
+                  className="w-5 h-5 rounded border-2 focus:ring-2 focus:ring-blue-500/20 mt-1"
+                  style={{ borderColor: colors.border }}
                 />
                 <label
                   htmlFor="terms"
                   className="text-sm leading-relaxed"
                   style={{ color: colors.textSecondary }}
                 >
-                  Я согласен с{" "}
+                  Я согласен с{' '}
                   <button
                     type="button"
                     className="font-semibold hover:underline transition-all duration-200"
                     style={{ color: colors.primary }}
                   >
                     условиями использования
-                  </button>{" "}
-                  и{" "}
+                  </button>{' '}
+                  и{' '}
                   <button
                     type="button"
                     className="font-semibold hover:underline transition-all duration-200"
@@ -318,20 +291,19 @@ const SignupPage = () => {
                 </label>
               </div>
 
+              {/* Submit */}
               <button
                 type="submit"
-                disabled={
-                  !acceptTerms || !isPasswordValid || !isConfirmPasswordValid
-                }
-                className="w-full py-4 px-6 rounded-xl font-semibold text-white transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg focus:ring-4 focus:ring-opacity-30 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                disabled={!acceptTerms || !isPasswordValid || !isConfirmPasswordValid}
+                className="w-full py-4 px-6 rounded-xl font-semibold text-white transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg focus:ring-4 focus:ring-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 style={{
                   background: `linear-gradient(135deg, ${colors.accent} 0%, ${colors.primary} 100%)`,
-                  focusRingColor: colors.primary,
                 }}
               >
                 Создать аккаунт
               </button>
 
+              {/* Divider */}
               <div className="relative my-8">
                 <div className="absolute inset-0 flex items-center">
                   <div
@@ -349,15 +321,12 @@ const SignupPage = () => {
                 </div>
               </div>
 
+              {/* Socials */}
               <div className="space-y-4">
                 <button
                   type="button"
-                  className="w-full flex items-center justify-center px-6 py-4 border-2 rounded-xl font-semibold transition-all duration-200 hover:shadow-md hover:scale-[1.02] focus:ring-4 focus:ring-opacity-20"
-                  style={{
-                    borderColor: colors.border,
-                    color: colors.text,
-                    focusRingColor: colors.primary,
-                  }}
+                  className="w-full flex items-center justify-center px-6 py-4 border-2 rounded-xl font-semibold transition-all duration-200 hover:shadow-md hover:scale-[1.02] focus:ring-4 focus:ring-blue-500/20"
+                  style={{ borderColor: colors.border, color: colors.text }}
                 >
                   <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
                     <path
@@ -382,27 +351,24 @@ const SignupPage = () => {
 
                 <button
                   type="button"
-                  className="w-full flex items-center justify-center px-6 py-4 border-2 rounded-xl font-semibold transition-all duration-200 hover:shadow-md hover:scale-[1.02] focus:ring-4 focus:ring-opacity-20"
-                  style={{
-                    borderColor: colors.border,
-                    color: colors.text,
-                    focusRingColor: colors.primary,
-                  }}
+                  className="w-full flex items-center justify-center px-6 py-4 border-2 rounded-xl font-semibold transition-all duration-200 hover:shadow-md hover:scale-[1.02] focus:ring-4 focus:ring-blue-500/20"
+                  style={{ borderColor: colors.border, color: colors.text }}
                 >
                   <MessageCircle
                     size={20}
                     className="mr-3"
-                    style={{ color: "#0088CC" }}
+                    style={{ color: '#0088CC' }}
                   />
                   Регистрация через Telegram
                 </button>
               </div>
 
+              {/* Footer */}
               <p
                 className="text-center text-base"
                 style={{ color: colors.textSecondary }}
               >
-                Уже есть аккаунт?{" "}
+                Уже есть аккаунт?{' '}
                 <Link
                   href="/login"
                   className="font-semibold hover:underline transition-all duration-200"
@@ -415,8 +381,6 @@ const SignupPage = () => {
           </div>
         </div>
       </div>
-
-
     </div>
   );
 };

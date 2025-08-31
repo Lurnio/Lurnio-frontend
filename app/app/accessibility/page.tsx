@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../components/Header";
+
 
 export const metadata = {
   title: "Доступність | MentorConnect",
@@ -12,7 +12,7 @@ export const dynamic = "force-static";
 export default function AccessibilityPage() {
   return (
     <>
-    <Header variant="minimal" />
+
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <header className="mb-10">
           <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -26,7 +26,7 @@ export default function AccessibilityPage() {
 
         <section className="mb-8 p-6 bg-white rounded-2xl shadow-md border border-slate-100">
           <h2 className="text-2xl font-semibold mb-2 text-slate-800">
-            Наше зобов'язання
+            Наше зобовязання
           </h2>
           <p className="text-slate-700">
             Ми керуємося принципами WCAG і впроваджуємо кращі практики
