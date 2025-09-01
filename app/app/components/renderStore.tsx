@@ -1,9 +1,9 @@
 "use client";
 
-import { CategoryGrid } from "./sections/CategoryGrid";
-import { Testimonials } from "./sections/Testimonials";
-import { FAQ } from "./sections/FAQ";
-import { CTABand } from "./sections/CTABand";
+import { CategoryGrid } from "./Sections/CategoryGrid";
+import { Testimonials } from "./Sections/Testimonials";
+import { FAQ } from "./Sections/FAQ";
+import { CTABand } from "./Sections/CTABand";
 import { BannerStore } from "./Banners/BannerStore";
 import { QuickStats } from "../ui/QuickStats";
 import { CardStore } from "./Cards/CardStore";
