@@ -1,6 +1,6 @@
 "use client";
 import { ButtonFavorite } from "@/app/ui/Buttons/ButtonFavorite";
-import { ButtonStore } from "@/app/ui/Buttons/ButtonStore";
+import { ButtonBlue} from "@/app/ui/Buttons/ButtonBlue";
 import { Star, Users } from "lucide-react";
 import { useState } from "react";
 
@@ -273,7 +273,7 @@ export const CardStore = () => {
                   )}
                 </div>
               </div>
-              <ButtonStore text="Купить"/>
+              <ButtonBlue text="Купить"/>
             </div>
           </div>
         </div>

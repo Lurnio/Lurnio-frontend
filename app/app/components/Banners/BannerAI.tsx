@@ -1,3 +1,5 @@
+import { ButtonBigWhaite } from "@/app/ui/Buttons/ButtonBigWhait";
+import { ButtonTransparent } from "@/app/ui/Buttons/ButtonTransparent";
 import { Bot } from "lucide-react";
 
 export const AIBanner = () => (
@@ -16,12 +18,8 @@ export const AIBanner = () => (
         Персонализированное обучение 24/7 с мгновенной обратной связью
       </p>
       <div className="flex gap-4">
-        <button className="bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors cursor-pointer">
-          Попробовать бесплатно
-        </button>
-        <button className="border border-white/30 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors cursor-pointer">
-          Узнать больше
-        </button>
+        <ButtonBigWhaite text="Поробовать бесплатно"/>
+        <ButtonTransparent text="Узнать больше"/>
       </div>
     </div>
   </div>

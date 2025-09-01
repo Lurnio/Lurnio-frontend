@@ -1,5 +1,5 @@
-import { ButtonMentor2 } from "@/app/ui/Buttons/ButtonMentor2";
-import { ButtonMentor1 } from "@/app/ui/Buttons/ButtontMentor1";
+import { ButtonHalfWhait,} from "@/app/ui/Buttons/ButtonHalfWhait";
+import { ButtonHalfBlue,} from "@/app/ui/Buttons/ButtonHalfBlue";
 import { Calendar, Star } from "lucide-react";
 
 interface Mentor {
@@ -252,8 +252,8 @@ export const CardMentor = () => (
           </div>
 
           <div className="mt-auto flex gap-1">
-            <ButtonMentor1 text="Забронировать" />
-            <ButtonMentor2 text="Профиль" />
+            <ButtonHalfBlue text="Забронировать" />
+            <ButtonHalfWhait text="Профиль" />
           </div>
         </div>
       ))}

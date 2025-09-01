@@ -1,4 +1,5 @@
-import { ArrowUpRight, Sparkles } from "lucide-react";
+import { ButtonBigWhaite } from "@/app/ui/Buttons/ButtonBigWhait";
+import { Sparkles } from "lucide-react";
 
 export const BannerStore = () => (
   <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-2xl p-8 text-white relative overflow-hidden">
@@ -15,9 +16,7 @@ export const BannerStore = () => (
       <p className="text-lg opacity-90 mb-4">
         Только до 30 ноября! Не упустите шанс прокачать навыки
       </p>
-      <button className="bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors cursor-pointer">
-        Выбрать курс <ArrowUpRight className="w-4 h-4 inline ml-1" />
-      </button>
+        <ButtonBigWhaite text="Выбрать курс"/>
     </div>
     <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full -mr-32 -mt-32"></div>
     <div className="absolute bottom-0 left-0 w-48 h-48 bg-white opacity-5 rounded-full -ml-24 -mb-24"></div>

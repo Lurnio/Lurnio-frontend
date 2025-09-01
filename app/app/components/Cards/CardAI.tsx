@@ -1,4 +1,5 @@
-import { AIButton } from "@/app/ui/Buttons/ButtonIACard";
+
+import { ButtonPurple } from "@/app/ui/Buttons/ButtonPurple";
 import { Bot, Star } from "lucide-react";
 //#region other
 interface AITeacher {
@@ -185,7 +186,7 @@ export const AICard = () => (
               </span>
               <span className="text-xs text-green-600">7 дней бесплатно</span>
             </div>
-            <AIButton text="Попробовать"/>
+            <ButtonPurple text="Попробовать"/>
           </div>
         </div>
       </div>
