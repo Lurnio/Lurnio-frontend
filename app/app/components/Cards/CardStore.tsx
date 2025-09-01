@@ -273,7 +273,7 @@ export const CardStore = () => {
                   )}
                 </div>
               </div>
-              <ButtonStore />
+              <ButtonStore text="Купить"/>
             </div>
           </div>
         </div>

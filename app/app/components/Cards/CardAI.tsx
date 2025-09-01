@@ -185,7 +185,7 @@ export const AICard = () => (
               </span>
               <span className="text-xs text-green-600">7 дней бесплатно</span>
             </div>
-            <AIButton />
+            <AIButton text="Попробовать"/>
           </div>
         </div>
       </div>

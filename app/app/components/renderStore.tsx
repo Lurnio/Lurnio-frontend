@@ -1,15 +1,28 @@
 "use client";
 
+import { CategoryGrid } from "./sections/CategoryGrid";
+import { Testimonials } from "./sections/Testimonials";
+import { FAQ } from "./sections/FAQ";
+import { CTABand } from "./sections/CTABand";
 import { BannerStore } from "./Banners/BannerStore";
 import { QuickStats } from "../ui/QuickStats";
 import { CardStore } from "./Cards/CardStore";
 
-export const RenderStoreContent = () => {
-  return (
-    <div className="space-y-6">
-      <BannerStore />
-      <QuickStats />
-      <CardStore />
-    </div>
-  );
-};
+export const RenderStoreContent = () => (
+  <div className="space-y-8 md:space-y-10 lg:space-y-12">
+    <BannerStore />
+    <QuickStats />
+    <CategoryGrid />
+    <h3 className="text-xl font-semibold text-gray-900 mb-4">
+      Топ-курсы для вас
+    </h3>
+    <CardStore />
+
+    <section>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+    <Testimonials />
+    <FAQ />
+    <CTABand />
+  </div>
+);
