@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export function Testimonials() {
   const items = [
     {
@@ -28,7 +30,13 @@ export function Testimonials() {
             className="bg-white border border-gray-200 rounded-2xl p-5 hover:shadow-sm transition-shadow"
           >
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-full bg-gray-200" />
+              <Image
+                src={"https://randomuser.me/api/portraits/women/44.jpg"}
+                alt="photo-profile"
+                width={30}
+                height={30}
+                className="!w-8 !h-8 rounded-full"
+              />
               <div className="text-sm font-semibold text-gray-900">
                 {r.name}
               </div>
