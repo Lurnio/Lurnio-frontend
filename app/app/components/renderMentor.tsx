@@ -1,9 +1,6 @@
 "use client";
 
-import { FeaturesStrip } from "./Sections/FeaturesStrip";
-import { Testimonials } from "./Sections/Testimonials";
-import { FAQ } from "./Sections/FAQ";
-import { CTABand } from "./Sections/CTABand";
+import { FeaturesStrip } from "./AiExpertsStoreContent/FeaturesStrip";
 import { BannerMentor } from "./Banners/BannerMentor";
 import { CardMentor } from "./Cards/CardMentor";
 
@@ -19,8 +16,5 @@ export const RenderMentorsContent = () => (
     <section>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     </section>
-    <Testimonials />
-    <FAQ />
-    <CTABand />
   </div>
 );

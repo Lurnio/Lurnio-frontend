@@ -1,6 +1,5 @@
-"use client";
-
 import { Globe, MessageCircle, TrendingUp, Users } from "lucide-react";
+import Image from "next/image";
 import React from "react";
 
 const Footer = () => {
@@ -10,12 +9,14 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <div className="w-3 h-3 bg-white rounded-full"></div>
-              </div>
-              <span className="font-bold text-gray-900 text-lg">
-                MentorConnect
-              </span>
+              <Image
+                src="/logo/lurnio-logo.jpg"
+                alt="Lurnio Logo"
+                width={32}
+                height={32}
+                priority
+              />
+              <span className="font-bold text-gray-900 text-lg">Lurnio</span>
             </div>
             <p className="text-gray-600 text-sm leading-relaxed mb-6">
               Платформа нового поколения для ускоренного обучения и

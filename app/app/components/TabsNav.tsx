@@ -9,21 +9,21 @@ const tabs = [
     label: "ИИ-наставники",
     icon: Bot,
     count: "24/7",
-    href: "/mainai",
+    href: "/ai-experts",
   },
   {
     id: "store",
     label: "Магазин курсов",
     icon: ShoppingCart,
     count: "1,200+",
-    href: "/mainstore",
+    href: "/store",
   },
   {
     id: "mentors",
     label: "Эксперты",
     icon: UserCheck,
     count: "2,500+",
-    href: "/mainexperts",
+    href: "/experts",
   },
 ] as const;
 

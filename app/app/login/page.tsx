@@ -44,14 +44,15 @@ const LoginPage = () => {
           >
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="mb-6">
+              <div className="mb-6 flex justify-center">
                 <div
-                  className="w-16 h-16 rounded-2xl flex items-center justify-center text-white font-bold text-2xl mx-auto shadow-lg"
+                  className="w-16 h-16 rounded-2xl flex items-center justify-center text-white font-bold text-3xl shadow-lg"
                   style={{
-                    background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.accent} 100%)`,
+                    background:
+                      "linear-gradient(135deg, #2563EB 0%, #8B5CF6 100%)",
                   }}
                 >
-                  M
+                  L
                 </div>
               </div>
               <h2
