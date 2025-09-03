@@ -1,9 +1,6 @@
 "use client";
 
-import { CategoryGrid } from "./Sections/CategoryGrid";
-import { Testimonials } from "./Sections/Testimonials";
-import { FAQ } from "./Sections/FAQ";
-import { CTABand } from "./Sections/CTABand";
+import { CategoryGrid } from "./AiExpertsStoreContent/CategoryGrid";
 import { BannerStore } from "./Banners/BannerStore";
 import { QuickStats } from "../ui/QuickStats";
 import { CardStore } from "./Cards/CardStore";
@@ -21,8 +18,5 @@ export const RenderStoreContent = () => (
     <section>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     </section>
-    <Testimonials />
-    <FAQ />
-    <CTABand />
   </div>
 );
