@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Home, ArrowLeft, RefreshCw } from "lucide-react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 
 const colors = {
   primary: "#2563EB",
@@ -30,7 +28,7 @@ export default function NotFoundPage() {
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
-          router.push("/login");
+          router.push("/");
           return 0;
         }
         return prev - 1;
@@ -42,12 +40,8 @@ export default function NotFoundPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-red-50 via-white to-purple-50">
-      {/* Если у тебя есть Header/Footer компоненты — импортируй их из /components */}
-      <Header />
-
       <div className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl w-full text-center">
-          {/* SVG блок я оставляю без изменений */}
           <h1
             className="text-6xl font-bold mb-4 bg-gradient-to-r bg-clip-text text-transparent"
             style={{
@@ -123,8 +117,6 @@ export default function NotFoundPage() {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 }

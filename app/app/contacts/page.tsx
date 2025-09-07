@@ -1,70 +1,127 @@
-import React from "react";
-
+import { Mail, Phone, MessageSquare } from "lucide-react";
 
 export const metadata = {
-  title: "Контакти | MentorConnect",
-  description:
-    "Контактна інформація MentorConnect: адреса, електронна пошта та години роботи.",
+  title: "Связаться с нами — Lurnio",
 };
 
-export const dynamic = "force-static";
-
-export default function ContactsPage() {
+export default function Page() {
   return (
-    <>
-
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <header className="mb-10">
-          <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Контакти
-          </h1>
-          <p className="text-slate-600">
-            Звяжіться з нами з будь-яких організаційних чи партнерських питань.
+    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
+      <div className="max-w-3xl mx-auto px-6 pt-10 pb-16">
+        <div className="bg-white rounded-2xl shadow-lg p-8">
+          <div className="flex items-center gap-3">
+            <MessageSquare className="w-6 h-6 text-purple-600" />
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+              Связаться с нами
+            </h1>
+          </div>
+          <p className="mt-2 text-gray-600">
+            Опишите вопрос — мы вернёмся с ответом. Формы работают без
+            клиентских скриптов.
           </p>
-        </header>
 
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-6 bg-white rounded-2xl shadow-md border border-slate-100">
-            <h2 className="text-xl font-semibold text-slate-800 mb-2">
-              Штаб-квартира
-            </h2>
-            <p className="text-slate-700">MentorConnect, GmbH</p>
-            <p className="text-slate-700">Example Strasse 12</p>
-            <p className="text-slate-700">10115 Berlin, Germany</p>
+          {/* Контакты */}
+          <div className="mt-6 grid sm:grid-cols-2 gap-4">
+            <div className="border border-gray-100 rounded-xl p-4">
+              <div className="flex items-center gap-2">
+                <Mail className="w-4 h-4 text-purple-600" />
+                <div className="font-semibold text-gray-900">Email</div>
+              </div>
+              <p className="mt-1 text-sm text-gray-600">
+                support@lurnio.example
+              </p>
+            </div>
+            <div className="border border-gray-100 rounded-xl p-4">
+              <div className="flex items-center gap-2">
+                <Phone className="w-4 h-4 text-purple-600" />
+                <div className="font-semibold text-gray-900">Телефон</div>
+              </div>
+              <p className="mt-1 text-sm text-gray-600">
+                +49 000 0000000 (09:00–18:00)
+              </p>
+            </div>
           </div>
 
-          <div className="p-6 bg-white rounded-2xl shadow-md border border-slate-100">
-            <h2 className="text-xl font-semibold text-slate-800 mb-2">
-              Електронна пошта
-            </h2>
-            <p className="text-slate-700">
-              Загальні питання: info@mentorconnect.example
-            </p>
-            <p className="text-slate-700">
-              Партнерства: partnerships@mentorconnect.example
-            </p>
-            <p className="text-slate-700">Преса: press@mentorconnect.example</p>
-          </div>
-
-          <div className="p-6 bg-white rounded-2xl shadow-md border border-slate-100">
-            <h2 className="text-xl font-semibold text-slate-800 mb-2">
-              Години роботи
-            </h2>
-            <p className="text-slate-700">Пн — Пт: 09:00 – 18:00 (CET)</p>
-            <p className="text-slate-700">Сб — Нд: вихідні</p>
-          </div>
-
-          <div className="p-6 bg-white rounded-2xl shadow-md border border-slate-100">
-            <h2 className="text-xl font-semibold text-slate-800 mb-2">
-              Реквізити
-            </h2>
-            <p className="text-slate-700">VAT: DE123456789</p>
-            <p className="text-slate-700">
-              Реєстр: Amtsgericht Berlin (Charlottenburg)
-            </p>
-          </div>
-        </section>
-      </main>
-    </>
+          {/* Форма (серверная разметка) */}
+          <form action="/contact" method="POST" className="mt-8 grid gap-4">
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  className="block text-sm text-gray-700 mb-1"
+                  htmlFor="name"
+                >
+                  Имя
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  required
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-white text-gray-900"
+                  placeholder="Как к вам обращаться?"
+                />
+              </div>
+              <div>
+                <label
+                  className="block text-sm text-gray-700 mb-1"
+                  htmlFor="email"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-white text-gray-900"
+                  placeholder="you@example.com"
+                />
+              </div>
+            </div>
+            <div>
+              <label
+                className="block text-sm text-gray-700 mb-1"
+                htmlFor="topic"
+              >
+                Тема
+              </label>
+              <input
+                id="topic"
+                name="topic"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-white text-gray-900"
+                placeholder="Кратко о чём вопрос"
+              />
+            </div>
+            <div>
+              <label
+                className="block text-sm text-gray-700 mb-1"
+                htmlFor="message"
+              >
+                Сообщение
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows={6}
+                required
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-white text-gray-900"
+                placeholder="Опишите проблему или запрос"
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-gray-500">
+                Отправляя форму, вы соглашаетесь с условиями и политикой
+                конфиденциальности.
+              </p>
+              <button
+                type="submit"
+                className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all"
+              >
+                Отправить
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
   );
 }
