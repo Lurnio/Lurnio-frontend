@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import {
   Star,
@@ -18,6 +18,8 @@ import {
   HelpCircle,
   ChevronDown,
   ThumbsUp,
+  X,
+  Download,
 } from "lucide-react";
 
 /* ---------------- Types ---------------- */
@@ -84,6 +86,29 @@ type TutorCard = {
   pricePerHour: number;
   lessonsCount: number;
   verified?: boolean;
+};
+
+/* Booking-related */
+type Booking = {
+  id: string;
+  slotId?: string; // если выбрали из сетки
+  date: string; // YYYY-MM-DD
+  time: string; // HH:mm
+  name: string;
+  email: string;
+  notes?: string;
+  createdAt: string; // ISO
+};
+
+type BookingForm = {
+  name: string;
+  email: string;
+  notes: string;
+};
+
+type AheadForm = {
+  date: string; // HTML date value
+  time: string; // HTML time value
 };
 
 /* --------------- Mock data (локально, без БД) --------------- */
@@ -312,24 +337,141 @@ function Stat({
   );
 }
 
+/* ---------------- Booking helpers (frontend) ---------------- */
+
+const LS_KEY = "mentor_bookings_v1";
+
+function loadBookings(): Booking[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(LS_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as Booking[];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveBookings(next: Booking[]) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(LS_KEY, JSON.stringify(next));
+}
+
+function combineDateTime(date: string, time: string): Date {
+  // интерпретируем как локальное время пользователя
+  const [h, m] = time.split(":").map((x) => parseInt(x, 10));
+  const parts = date.split("-").map((x) => parseInt(x, 10));
+  const d = new Date(parts[0], parts[1] - 1, parts[2], h, m, 0, 0);
+  return d;
+}
+
+function toICS(booking: Booking, mentor: Mentor): string {
+  // простейший .ics для 60-мин сессии
+  const start = combineDateTime(booking.date, booking.time);
+  const end = new Date(start.getTime() + 60 * 60 * 1000);
+
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const fmt = (dt: Date) =>
+    `${dt.getUTCFullYear()}${pad(dt.getUTCMonth() + 1)}${pad(
+      dt.getUTCDate()
+    )}T${pad(dt.getUTCHours())}${pad(dt.getUTCMinutes())}${pad(
+      dt.getUTCSeconds()
+    )}Z`;
+
+  const uid = `${booking.id}@mentor.local`;
+  const summary = `Занятие с ${mentor.name}`;
+  const descLines = [
+    `Тема: Индивидуальная сессия`,
+    `Имя: ${booking.name}`,
+    `Email: ${booking.email}`,
+    booking.notes ? `Заметки: ${booking.notes}` : undefined,
+  ].filter(Boolean) as string[];
+
+  return [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Mentor Booking//RU",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    "BEGIN:VEVENT",
+    `UID:${uid}`,
+    `DTSTAMP:${fmt(new Date())}`,
+    `DTSTART:${fmt(start)}`,
+    `DTEND:${fmt(end)}`,
+    `SUMMARY:${summary}`,
+    `DESCRIPTION:${descLines.join("\\n")}`,
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ].join("\r\n");
+}
+
+function downloadICS(ics: string, filename: string) {
+  const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
 /* ---------------- Page ---------------- */
 
 export default function Page() {
   const mentor = mockMentor;
+
+  /* UI state */
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [faqOpen, setFaqOpen] = useState<string | null>(null);
-  const [reviewSort, setReviewSort] = useState<"new" | "top" | "high" | "low">(
-    "new"
-  );
+  const [reviewSort, setReviewSort] = useState<ReviewSort>("new");
+
+  /* Booking state */
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState<BookingForm>({
+    name: "",
+    email: "",
+    notes: "",
+  });
+  const [ahead, setAhead] = useState<AheadForm>({ date: "", time: "" });
+  const [message, setMessage] = useState<string>("");
+
+  useEffect(() => {
+    setBookings(loadBookings());
+  }, []);
+
+  // мапа занятых дат/времени из сохранённых броней
+  const bookedMap = useMemo(() => {
+    const map: Record<string, true> = {};
+    bookings.forEach((b) => {
+      map[`${b.date}T${b.time}`] = true;
+      if (b.slotId) map[b.slotId] = true;
+    });
+    return map;
+  }, [bookings]);
+
+  const slotsWithState: Slot[] = useMemo(() => {
+    return mockSlots.map((s) => ({
+      ...s,
+      isBooked:
+        s.isBooked ||
+        bookedMap[s.id] ||
+        bookedMap[`${s.date}T${s.time}`] ||
+        false,
+    }));
+  }, [bookedMap]);
 
   const groupedSlots = useMemo(() => {
     const map: Record<string, Slot[]> = {};
-    mockSlots.forEach((s) => {
+    slotsWithState.forEach((s) => {
       map[s.date] = map[s.date] ? [...map[s.date], s] : [s];
     });
     return Object.entries(map).sort((a, b) => (a[0] < b[0] ? -1 : 1));
-  }, []);
+  }, [slotsWithState]);
 
   const ratingDist = useMemo(() => {
     const dist = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 } as Record<number, number>;
@@ -353,6 +495,97 @@ export default function Page() {
     }
   }, [reviewSort]);
 
+  const selectedSlotObj: Slot | null = useMemo(() => {
+    if (!selectedSlot) return null;
+    return slotsWithState.find((s) => s.id === selectedSlot) ?? null;
+  }, [selectedSlot, slotsWithState]);
+
+  function openBookingForSlot(slotId: string) {
+    setSelectedSlot(slotId);
+    setShowModal(true);
+    setMessage("");
+  }
+
+  function createBookingPayload(): Booking | null {
+    // из выбранного слота
+    if (selectedSlotObj) {
+      const key = `${selectedSlotObj.date}T${selectedSlotObj.time}`;
+      if (bookedMap[key]) {
+        setMessage("Увы, этот слот только что заняли. Выберите другой.");
+        return null;
+      }
+      const now = new Date();
+      const start = combineDateTime(selectedSlotObj.date, selectedSlotObj.time);
+      if (start.getTime() < now.getTime()) {
+        setMessage("Нельзя бронировать прошедшее время.");
+        return null;
+      }
+      return {
+        id: `b-${Date.now()}`,
+        slotId: selectedSlotObj.id,
+        date: selectedSlotObj.date,
+        time: selectedSlotObj.time,
+        name: form.name.trim(),
+        email: form.email.trim(),
+        notes: form.notes.trim(),
+        createdAt: new Date().toISOString(),
+      };
+    }
+
+    // «Наперед»: произвольная дата/время
+    if (ahead.date && ahead.time) {
+      const key = `${ahead.date}T${ahead.time}`;
+      if (bookedMap[key]) {
+        setMessage("На выбранные дату и время уже есть бронь.");
+        return null;
+      }
+      const now = new Date();
+      const start = combineDateTime(ahead.date, ahead.time);
+      if (start.getTime() < now.getTime()) {
+        setMessage("Выберите время в будущем.");
+        return null;
+      }
+      return {
+        id: `b-${Date.now()}`,
+        date: ahead.date,
+        time: ahead.time,
+        name: form.name.trim(),
+        email: form.email.trim(),
+        notes: form.notes.trim(),
+        createdAt: new Date().toISOString(),
+      };
+    }
+
+    setMessage("Выберите слот в календаре или укажите дату и время ниже.");
+    return null;
+  }
+
+  function handleConfirmBooking(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    setMessage("");
+
+    if (!form.name.trim() || !form.email.trim()) {
+      setMessage("Укажите имя и email.");
+      return;
+    }
+
+    const payload = createBookingPayload();
+    if (!payload) return;
+
+    const next = [...bookings, payload];
+    setBookings(next);
+    saveBookings(next);
+
+    // генерим .ics
+    const ics = toICS(payload, mentor);
+    downloadICS(ics, `booking_${payload.date}_${payload.time}.ics`);
+
+    setShowModal(false);
+    setForm({ name: "", email: "", notes: "" });
+    setAhead({ date: "", time: "" });
+    setSelectedSlot(null);
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
       <div className="max-w-6xl mx-auto px-6 pt-10">
@@ -362,7 +595,7 @@ export default function Page() {
             {/* Левая колонка с изображением */}
             <div className="relative md:col-span-1 min-h-[260px]">
               <Image
-                src={mentor.avatar}
+                src="/logo/lurnio-logo.jpg"
                 alt={mentor.name}
                 fill
                 sizes="(max-width: 768px) 100vw, 33vw"
@@ -434,7 +667,7 @@ export default function Page() {
                 <div className="shrink-0 flex flex-col items-end gap-2">
                   <button
                     onClick={() => setIsSubscribed((v) => !v)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ${
+                    className={`cursor-pointer flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ${
                       isSubscribed
                         ? "bg-green-600 text-white border-green-600 hover:bg-green-700"
                         : "bg-white text-purple-600 border-purple-200 hover:bg-purple-50"
@@ -460,7 +693,7 @@ export default function Page() {
 
                   <div className="flex gap-2">
                     <button
-                      className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-5 py-2.5 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all font-medium flex items-center gap-2"
+                      className="cursor-pointer bg-gradient-to-r from-purple-600 to-pink-600 text-white px-5 py-2.5 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all font-medium flex items-center gap-2"
                       onClick={() => {
                         const el = document.getElementById("booking");
                         if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -468,7 +701,7 @@ export default function Page() {
                     >
                       <CalendarIcon className="w-5 h-5" /> Забронировать
                     </button>
-                    <button className="px-5 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50">
+                    <button className="cursor-pointer px-5 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50">
                       Задать вопрос
                     </button>
                   </div>
@@ -516,7 +749,7 @@ export default function Page() {
           <div className="lg:col-span-2 bg-white rounded-2xl shadow-lg overflow-hidden">
             <div className="relative h-64">
               <Image
-                src="/mentor/demo-hero.jpg"
+                src="/logo/lurnio-logo.jpg"
                 alt="Знакомство с менторством"
                 fill
                 sizes="(max-width: 1024px) 100vw, 66vw"
@@ -578,10 +811,51 @@ export default function Page() {
               </div>
             </div>
             {selectedSlot && (
-              <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-5 py-2 rounded-xl hover:from-purple-700 hover:to-pink-700">
+              <button
+                className="cursor-pointer bg-gradient-to-r from-purple-600 to-pink-600 text-white px-5 py-2 rounded-xl hover:from-purple-700 hover:to-pink-700"
+                onClick={() => setShowModal(true)}
+              >
                 Забронировать слот
               </button>
             )}
+          </div>
+
+          {/* Бронирование наперед */}
+          <div className="mt-6 border border-gray-100 rounded-xl p-4">
+            <div className="text-sm text-gray-800 font-medium">
+              Бронировать наперёд (произвольная дата и время)
+            </div>
+            <div className="mt-3 grid sm:grid-cols-3 gap-3">
+              <input
+                type="date"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                value={ahead.date}
+                onChange={(e) =>
+                  setAhead((v) => ({ ...v, date: e.target.value }))
+                }
+              />
+              <input
+                type="time"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                value={ahead.time}
+                onChange={(e) =>
+                  setAhead((v) => ({ ...v, time: e.target.value }))
+                }
+              />
+              <button
+                className="cursor-pointer border border-purple-200 hover:bg-purple-50 text-purple-700 rounded-lg px-4 py-2 text-sm"
+                onClick={() => {
+                  setSelectedSlot(null);
+                  setShowModal(true);
+                  setMessage("");
+                }}
+              >
+                Забронировать на выбранные дату/время
+              </button>
+            </div>
+            <div className="text-xs text-gray-500 mt-2">
+              Проверка на коллизии выполняется при подтверждении брони.
+            </div>
           </div>
 
           <div className="mt-6 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -600,13 +874,14 @@ export default function Page() {
                       key={s.id}
                       disabled={s.isBooked}
                       onClick={() => setSelectedSlot(s.id)}
-                      className={`px-3 py-1.5 rounded-lg border text-sm transition-all ${
+                      className={`cursor-pointer px-3 py-1.5 rounded-lg border text-sm transition-all ${
                         s.isBooked
                           ? "bg-gray-100 text-gray-400 border-gray-100 cursor-not-allowed"
                           : selectedSlot === s.id
                           ? "bg-purple-600 text-white border-purple-600"
                           : "bg-white text-gray-700 border-gray-200 hover:border-purple-300 hover:bg-purple-50"
                       }`}
+                      title={s.isBooked ? "Слот занят" : "Выбрать слот"}
                     >
                       {s.time}
                     </button>
@@ -757,7 +1032,7 @@ export default function Page() {
                       </div>
                     </div>
                     <button
-                      className="mt-3 w-full border border-purple-200 hover:bg-purple-50 text-purple-700 rounded-lg py-2 text-sm"
+                      className="cursor-pointer mt-3 w-full border border-purple-200 hover:bg-purple-50 text-purple-700 rounded-lg py-2 text-sm"
                       onClick={() => {
                         const el = document.getElementById("booking");
                         if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -798,7 +1073,7 @@ export default function Page() {
                     onClick={() =>
                       setFaqOpen((v) => (v === item.id ? null : item.id))
                     }
-                    className="w-full text-left py-3"
+                    className="cursor-pointer w-full text-left py-3"
                   >
                     <div className="flex items-center justify-between gap-4">
                       <div className="font-medium text-gray-900 flex items-center gap-2">
@@ -831,7 +1106,7 @@ export default function Page() {
                   <div key={t.id} className="flex gap-3">
                     <div className="relative w-14 h-14">
                       <Image
-                        src={t.avatar}
+                        src="/logo/lurnio-logo.jpg"
                         alt={t.name}
                         fill
                         sizes="56px"
@@ -860,7 +1135,7 @@ export default function Page() {
                         ₽{t.pricePerHour.toLocaleString()} / ч
                       </div>
                     </div>
-                    <button className="self-start text-sm px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50">
+                    <button className="cursor-pointer self-start text-sm px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50">
                       Перейти
                     </button>
                   </div>
@@ -948,7 +1223,7 @@ export default function Page() {
                 <div className="flex items-center gap-3">
                   <div className="relative w-10 h-10">
                     <Image
-                      src={r.userAvatar}
+                      src="/logo/lurnio-logo.jpg"
                       alt={r.user}
                       fill
                       sizes="40px"
@@ -966,7 +1241,7 @@ export default function Page() {
                   <RatingStars rating={r.rating} />
                 </div>
                 <p className="mt-2 text-gray-700 leading-relaxed">{r.text}</p>
-                <button className="mt-3 inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900">
+                <button className="cursor-pointer mt-3 inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900">
                   <ThumbsUp className="w-4 h-4" /> Полезно ({r.likes || 0})
                 </button>
               </div>
@@ -990,7 +1265,7 @@ export default function Page() {
               const el = document.getElementById("booking");
               if (el) el.scrollIntoView({ behavior: "smooth" });
             }}
-            className="mt-6 px-8 py-3 bg-white text-purple-700 rounded-xl font-semibold hover:bg-gray-100"
+            className="cursor-pointer mt-6 px-8 py-3 bg-white text-purple-700 rounded-xl font-semibold hover:bg-gray-100"
           >
             Забронировать
           </button>
@@ -998,6 +1273,150 @@ export default function Page() {
 
         <div className="h-16" />
       </div>
+
+      {/* Modal: Подтверждение брони */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div
+            className="absolute inset-0 bg-black/30"
+            onClick={() => setShowModal(false)}
+          />
+          <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-lg p-6">
+            <button
+              className="cursor-pointer absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+              onClick={() => setShowModal(false)}
+              aria-label="Закрыть"
+              title="Закрыть"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <h3 className="text-lg font-semibold text-gray-900">
+              Подтверждение брони
+            </h3>
+
+            <div className="mt-2 text-sm text-gray-600">
+              {selectedSlotObj ? (
+                <>
+                  Вы выбрали:{" "}
+                  <span className="font-medium text-gray-900">
+                    {new Date(selectedSlotObj.date).toLocaleDateString(
+                      "ru-RU",
+                      {
+                        weekday: "long",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )}
+                  </span>{" "}
+                  в{" "}
+                  <span className="font-medium text-gray-900">
+                    {selectedSlotObj.time}
+                  </span>
+                </>
+              ) : ahead.date && ahead.time ? (
+                <>
+                  Вы выбрали:{" "}
+                  <span className="font-medium text-gray-900">
+                    {new Date(ahead.date).toLocaleDateString("ru-RU", {
+                      weekday: "long",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </span>{" "}
+                  в{" "}
+                  <span className="font-medium text-gray-900">
+                    {ahead.time}
+                  </span>
+                </>
+              ) : (
+                <>Выберите слот или укажите дату и время ниже</>
+              )}
+            </div>
+
+            <form className="mt-4 grid gap-3">
+              {/* Если бронирование "наперед" и слот не выбран — покажем поля даты/времени внутри модалки тоже */}
+              {!selectedSlotObj && (
+                <div className="grid grid-cols-2 gap-3">
+                  <input
+                    type="date"
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                    value={ahead.date}
+                    onChange={(e) =>
+                      setAhead((v) => ({ ...v, date: e.target.value }))
+                    }
+                  />
+                  <input
+                    type="time"
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                    value={ahead.time}
+                    onChange={(e) =>
+                      setAhead((v) => ({ ...v, time: e.target.value }))
+                    }
+                  />
+                </div>
+              )}
+
+              <input
+                type="text"
+                placeholder="Ваше имя"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                value={form.name}
+                onChange={(e) =>
+                  setForm((v) => ({ ...v, name: e.target.value }))
+                }
+              />
+              <input
+                type="email"
+                placeholder="Email для подтверждения"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                value={form.email}
+                onChange={(e) =>
+                  setForm((v) => ({ ...v, email: e.target.value }))
+                }
+              />
+              <textarea
+                placeholder="Заметки (необязательно)"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm min-h-[80px]"
+                value={form.notes}
+                onChange={(e) =>
+                  setForm((v) => ({ ...v, notes: e.target.value }))
+                }
+              />
+
+              {message && (
+                <div className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
+                  {message}
+                </div>
+              )}
+
+              <div className="mt-2 flex items-center justify-between gap-2">
+                <button
+                  type="button"
+                  className="cursor-pointer px-4 py-2 rounded-xl border border-gray-200 hover:bg-gray-50"
+                  onClick={() => setShowModal(false)}
+                >
+                  Отмена
+                </button>
+                <button
+                  type="button"
+                  onClick={handleConfirmBooking}
+                  className="cursor-pointer bg-gradient-to-r from-purple-600 to-pink-600 text-white px-5 py-2 rounded-xl hover:from-purple-700 hover:to-pink-700 inline-flex items-center gap-2"
+                  title="Подтвердить и скачать .ics"
+                >
+                  <Download className="w-4 h-4" />
+                  Подтвердить бронь (.ics)
+                </button>
+              </div>
+
+              <div className="text-xs text-gray-500 mt-2">
+                После подтверждения мы сохраним бронь локально и предложим
+                календарный файл (.ics) на 60 минут.
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

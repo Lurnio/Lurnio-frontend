@@ -24,7 +24,7 @@ const STORIES: Story[] = [
     quote:
       "Фокус на практике и ревью кода помогли быстро закрыть пробелы и пройти собес.",
     href: "/success-stories/alina-k",
-    img: "/stories/alina.jpg",
+    img: "/logo/lurnio-logo.jpg",
   },
   {
     name: "Данил П.",
@@ -34,7 +34,7 @@ const STORIES: Story[] = [
     quote:
       "С mentor-сессиями разобрал архитектуру проекта и стал увереннее в TypeScript.",
     href: "/success-stories/danil-p",
-    img: "/stories/danil.jpg",
+    img: "/logo/lurnio-logo.jpg",
   },
   {
     name: "Мария С.",
@@ -43,7 +43,7 @@ const STORIES: Story[] = [
     result: "смена сферы и успешный релокейт",
     quote: "План подготовки + проекты в портфолио сделали своё дело.",
     href: "/success-stories/maria-s",
-    img: "/stories/maria.jpg",
+    img: "/logo/lurnio-logo.jpg",
   },
 ] as const;
 
