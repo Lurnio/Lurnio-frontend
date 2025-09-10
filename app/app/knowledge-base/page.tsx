@@ -23,19 +23,19 @@ const CATEGORIES: Category[] = [
     title: "Начало работы",
     desc: "Первые шаги, профиль, onboarding.",
     href: "/knowledge-base/getting-started",
-    img: "/kb/getting-started.jpg",
+    img: "/logo/lurnio-logo.jpg",
   },
   {
     title: "Настройки аккаунта",
     desc: "Безопасность, пароли, уведомления.",
     href: "/knowledge-base/account",
-    img: "/kb/account.jpg",
+    img: "/logo/lurnio-logo.jpg",
   },
   {
     title: "Оплата и биллинг",
     desc: "Методы оплаты, возвраты, чеки.",
     href: "/knowledge-base/billing",
-    img: "/kb/billing.jpg",
+    img: "/logo/lurnio-logo.jpg",
   },
 ] as const;
 
@@ -43,17 +43,17 @@ const POPULAR: Article[] = [
   {
     title: "Как перенести занятие",
     href: "/knowledge-base/lessons/reschedule",
-    img: "/kb/reschedule.jpg",
+    img: "/logo/lurnio-logo.jpg",
   },
   {
     title: "Сброс пароля",
     href: "/knowledge-base/account/reset-password",
-    img: "/kb/password.jpg",
+    img: "/logo/lurnio-logo.jpg",
   },
   {
     title: "Изменить способ оплаты",
     href: "/knowledge-base/billing/payment-methods",
-    img: "/kb/payments.jpg",
+    img: "/logo/lurnio-logo.jpg",
   },
   { title: "Проверка статуса сервиса", href: "/status", img: "/kb/status.jpg" },
 ] as const;

@@ -1,12 +1,30 @@
-// app/components/...(твой Header)
 "use client";
 import Link from "next/link";
-import { Search } from "lucide-react";
-import { useState } from "react";
+import { Search, ShoppingCart } from "lucide-react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [cartCount, setCartCount] = useState<number>(0);
+
+  // Слушаем локальное хранилище, чтобы бейдж обновлялся после изменений на /cart
+  useEffect(() => {
+    const read = () => {
+      try {
+        const raw = localStorage.getItem("cart_count");
+        setCartCount(raw ? parseInt(raw, 10) || 0 : 0);
+      } catch {
+        setCartCount(0);
+      }
+    };
+    read();
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "cart_count") read();
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
 
   return (
     <header className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
@@ -21,6 +39,7 @@ export default function Header() {
                 width={40}
                 height={40}
                 priority
+                className="rounded-md"
               />
               <span className="text-xl font-bold text-gray-900">Lurnio</span>
             </Link>
@@ -44,6 +63,25 @@ export default function Header() {
               </div>
             </div>
 
+            {/* Корзина */}
+            <Link
+              href="/cart"
+              className="relative inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-200 hover:bg-gray-50 transition"
+              aria-label="Перейти в корзину"
+            >
+              <div className="relative">
+                <ShoppingCart className="w-5 h-5 text-gray-700" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-blue-600 text-white text-[10px] font-semibold flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </div>
+              <span className="hidden sm:block text-sm font-medium text-gray-900">
+                Корзина
+              </span>
+            </Link>
+
             {/* Кнопка выбора роли */}
             <div className="flex items-center gap-2">
               <Link
@@ -52,10 +90,6 @@ export default function Header() {
               >
                 Выбрать роль
               </Link>
-              {/* СТАРЫЕ ссылки на всякий случай оставляем в коде (можно убрать визуально)
-              <Link href="/login" className="hidden">Войти</Link>
-              <Link href="/registration" className="hidden">Регистрация</Link>
-              */}
             </div>
           </div>
         </div>

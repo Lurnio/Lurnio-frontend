@@ -31,7 +31,7 @@ export function Testimonials() {
           >
             <div className="flex items-center gap-2 mb-3">
               <Image
-                src={"https://randomuser.me/api/portraits/women/44.jpg"}
+                src="/logo/lurnio-logo.jpg"
                 alt="photo-profile"
                 width={30}
                 height={30}
